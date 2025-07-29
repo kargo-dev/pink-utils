@@ -9,20 +9,55 @@
 	"compatibility_date": "2025-07-22",
 	"observability": {
 		"enabled": true
-	}
+	},
+	"kv_namespaces": [
+		{
+			"binding": "PINK_UTILS_KV",
+			"id": "0b7a6083eb3240538d3ef3550eaabf21",
+			"preview_id": "7842a34f654e4457ba2e284d09817623"
+		}
+	],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "pink-utils",
+			"database_id": "13256af1-a32e-491e-aac4-7b754398ac4d"
+		}
+	],
+	"triggers": {
+		"crons": [
+			"0 * * * *", // Every hour
+			"*/5 * * * *", // Every 5 minutes
+		]
+	},
+	"vars": {
+		"EVM_BURN_ADDRESS": "0x000000000000000000000000000000000000dEaD",
+		"PINKDROP_CONTRACT_ADDRESS": "0x17BC479B1f20CE9f46c5E2E98FB5590743f31F4d",
+		"MOONBEAM": {
+			"CHAIN_ID": 1284,
+			"PINK_CONTRACT_ADDRESS": "0xffffffff30478fafbe935e466da114e14fb3563d",
+			"RPC_URL": "https://rpc.api.moonbeam.network"
+		},
+		"BASE": {
+			"CHAIN_ID": 8453,
+			"PINK_CONTRACT_ADDRESS": "0x66fc31b3233c7C001bdD21Ff6E5E66fA08EF85D0",
+			"RPC_URL": "https://mainnet.base.org"
+		},
+		"PHALA": {
+			"BURN_AMOUNT": 18862885
+		},
+	},
 	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
 	 */
 	// "placement": { "mode": "smart" },
-
 	/**
 	 * Bindings
 	 * Bindings allow your Worker to interact with resources on the Cloudflare Developer Platform, including
 	 * databases, object storage, AI inference, real-time communication and more.
 	 * https://developers.cloudflare.com/workers/runtime-apis/bindings/
 	 */
-
 	/**
 	 * Environment Variables
 	 * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
@@ -32,13 +67,11 @@
 	 * Note: Use secrets to store sensitive data.
 	 * https://developers.cloudflare.com/workers/configuration/secrets/
 	 */
-
 	/**
 	 * Static Assets
 	 * https://developers.cloudflare.com/workers/static-assets/binding/
 	 */
 	// "assets": { "directory": "./public/", "binding": "ASSETS" },
-
 	/**
 	 * Service Bindings (communicate between multiple Workers)
 	 * https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
