@@ -12,8 +12,6 @@ async function updatePinkDropStats(env: Env): Promise<void> {
             },
             where: {
                 functionName: 'batchAll',
-                to: '0x17bc479b1f20ce9f46c5e2e98fb5590743f31f4d',
-                value: { in: ['10000000000000', '30000000000000', '50000000000000'] },
             },
         });
 
