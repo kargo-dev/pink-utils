@@ -38,11 +38,14 @@ export async function burnHandler(request: Request, env: Env, ctx: ExecutionCont
         const minutesUntilNextHour = 60 - now.getMinutes();
         const cacheExpiry = minutesUntilNextHour * 60; // Convert to seconds
 
-        // Create a new response and cache it
+        // Create a new response with all headers set during creation
         response = new Response(JSON.stringify(data), {
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Cache-Control': `public, s-maxage=${cacheExpiry}`,
+            },
         });
-        response.headers.append('Cache-Control', `max-age=${cacheExpiry}`);
+
 
         // Store in cache
         ctx.waitUntil(cache.put(cacheKey, response.clone()));

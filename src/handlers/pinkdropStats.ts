@@ -33,9 +33,11 @@ export async function pinkdropStatsHandler(request: Request, env: Env, ctx: Exec
 
         // Create a new response and cache it
         response = new Response(JSON.stringify(data), {
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Cache-Control': `public, s-maxage=${cacheExpiry}`,
+            },
         });
-        response.headers.append('Cache-Control', `max-age=${cacheExpiry}`);
 
         // Store in cache
         ctx.waitUntil(cache.put(cacheKey, response.clone()));
