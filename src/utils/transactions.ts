@@ -22,7 +22,6 @@ async function fetchTokenTransactions(
 ): Promise<any> {
 
     const url = `https://api.etherscan.io/v2/api?chainid=${chainId}&module=account&action=tokentx&contractaddress=${contractAddress}&address=${address}&page=${page}&offset=${offset}&startblock=${startblock}&endblock=${endblock}&sort=${sort}&apikey=${apiKey}`;
-    console.log(`Fetching transactions from URL: ${url}`); // Debugging log
 
     try {
         const response = await fetch(url);

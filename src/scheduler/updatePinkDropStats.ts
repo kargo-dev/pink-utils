@@ -35,12 +35,20 @@ async function updatePinkDropStats(env: Env): Promise<void> {
             },
         });
 
+        // Query 4: Calculate no of completed tournaments
+        const completedTournaments = await prisma.transaction.count({
+            where: {
+                functionName: 'settleTournament',
+            },
+        });
+
         // Combine results into a single JSON object
         const stats = {
             pinkSpentOnTickets: (Number(pinkSpentOnTickets._sum.value) || 0) / 10000000000.0,
             ticketsPurchased: ((Number(pinkSpentOnTickets._sum.value) || 0) / 10000000000.0) / 1000,
             rewardsClaimed: (Number(rewardsClaimed._sum.value) || 0) / 10000000000.0,
             pinkBurnedByTournaments: (Number(rewardsSettled._sum.value) || 0) / 10000000000.0,
+            completedTournaments: completedTournaments,
         };
 
         // Store the JSON object in KV
