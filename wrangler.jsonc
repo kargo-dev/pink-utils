@@ -27,7 +27,7 @@
 	"triggers": {
 		"crons": [
 			"0 * * * *", // Every hour
-			"*/5 * * * *", // Every 5 minutes
+			"*/30 * * * *", // Every 30 minutes
 		]
 	},
 	"vars": {

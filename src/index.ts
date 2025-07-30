@@ -53,8 +53,8 @@ export default {
 				console.log("Updating burn balances...");
 				await updateBurnBalances(env);
 				break;
-			case "*/5 * * * *":
-				// Every 5 minutes
+			case "*/30 * * * *":
+				// Every 30 minutes
 				console.log("Syncing token transactions...");
 				await syncTokenTransactions(env);
 				await updatePinkDropStats(env);
