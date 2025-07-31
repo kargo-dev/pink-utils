@@ -42,13 +42,101 @@ async function updatePinkDropStats(env: Env): Promise<void> {
             },
         });
 
+        // Calculate time periods for burn statistics queries
+        const now = new Date();
+        const oneDayAgo = new Date(now);
+        oneDayAgo.setDate(now.getDate() - 1);
+
+        const sevenDaysAgo = new Date(now);
+        sevenDaysAgo.setDate(now.getDate() - 7);
+
+        const fourteenDaysAgo = new Date(now);
+        fourteenDaysAgo.setDate(now.getDate() - 14);
+
+        const thirtyDaysAgo = new Date(now);
+        thirtyDaysAgo.setDate(now.getDate() - 30);
+
+        const sixtyDaysAgo = new Date(now);
+        sixtyDaysAgo.setDate(now.getDate() - 60);
+
+
+        // Query for burn amounts in different time periods with individual queries
+        const burnedLast1Day = await prisma.transaction.aggregate({
+            _sum: {
+                value: true,
+            },
+            where: {
+                functionName: 'settleTournament',
+                timestamp: {
+                    gte: oneDayAgo.toISOString(),
+                },
+            },
+        });
+
+        const burnedLast7Days = await prisma.transaction.aggregate({
+            _sum: {
+                value: true,
+            },
+            where: {
+                functionName: 'settleTournament',
+                timestamp: {
+                    gte: sevenDaysAgo.toISOString(),
+                },
+            },
+        });
+
+        const burnedLast14Days = await prisma.transaction.aggregate({
+            _sum: {
+                value: true,
+            },
+            where: {
+                functionName: 'settleTournament',
+                timestamp: {
+                    gte: fourteenDaysAgo.toISOString(),
+                },
+            },
+        });
+
+        const burnedLast30Days = await prisma.transaction.aggregate({
+            _sum: {
+                value: true,
+            },
+            where: {
+                functionName: 'settleTournament',
+                timestamp: {
+                    gte: thirtyDaysAgo.toISOString(),
+                },
+            },
+        });
+
+        const burnedLast60Days = await prisma.transaction.aggregate({
+            _sum: {
+                value: true,
+            },
+            where: {
+                functionName: 'settleTournament',
+                timestamp: {
+                    gte: sixtyDaysAgo.toISOString(),
+                },
+            },
+        });
+
+        // Helper function to convert from raw value to PINK
+        const toPink = (value: any): number => (Number(value) || 0) / 10000000000.0;
+
         // Combine results into a single JSON object
         const stats = {
-            pinkSpentOnTickets: (Number(pinkSpentOnTickets._sum.value) || 0) / 10000000000.0,
-            ticketsPurchased: ((Number(pinkSpentOnTickets._sum.value) || 0) / 10000000000.0) / 1000,
-            rewardsClaimed: (Number(rewardsClaimed._sum.value) || 0) / 10000000000.0,
-            pinkBurnedByTournaments: (Number(rewardsSettled._sum.value) || 0) / 10000000000.0,
+            pinkSpentOnTickets: toPink(pinkSpentOnTickets._sum.value),
+            ticketsPurchased: toPink(pinkSpentOnTickets._sum.value) / 1000,
+            rewardsClaimed: toPink(rewardsClaimed._sum.value),
+            pinkBurnedByTournaments: toPink(rewardsSettled._sum.value),
             completedTournaments: completedTournaments,
+            // Add burn statistics for different time periods
+            burnedLast1Day: toPink(burnedLast1Day._sum.value),
+            burnedLast7Days: toPink(burnedLast7Days._sum.value),
+            burnedLast14Days: toPink(burnedLast14Days._sum.value),
+            burnedLast30Days: toPink(burnedLast30Days._sum.value),
+            burnedLast60Days: toPink(burnedLast60Days._sum.value),
         };
 
         // Store the JSON object in KV
