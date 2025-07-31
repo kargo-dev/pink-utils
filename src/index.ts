@@ -6,12 +6,10 @@
 import { AutoRouter, cors } from 'itty-router';
 
 import { rootHandler } from './handlers/root';
-import { burnHandler } from './handlers/burn';
 import { notFoundHandler } from './handlers/notFound';
-import { updateBurnBalances } from './scheduler/updateBurnBalances';
 import { syncTokenTransactions } from './utils/transactions';
-import { updatePinkDropStats } from './scheduler/updatePinkDropStats';
-import { pinkdropStatsHandler } from './handlers/pinkdropStats';
+import { updatePinkStats } from './scheduler/updatePinkStats';
+import { pinkStatsHandler } from './handlers/pinkStats';
 
 const { preflight, corsify } = cors({
 	origin: '*',
@@ -29,11 +27,8 @@ const router = AutoRouter({
 // Root endpoint
 router.get('/', rootHandler);
 
-// Burn balances endpoint
-router.get('/burn', burnHandler);
-
-// Add PinkDrop stats endpoint
-router.get('/pinkdrop-stats', pinkdropStatsHandler);
+// Consolidated PINK stats endpoint
+router.get('/pink-stats', pinkStatsHandler);
 
 // 404 handler
 router.all('*', notFoundHandler);
@@ -48,16 +43,13 @@ export default {
 	) {
 		// Write code for updating your API
 		switch (controller.cron) {
-			case "0 * * * *":
-				// Every hour
-				console.log("Updating burn balances...");
-				await updateBurnBalances(env);
-				break;
 			case "*/30 * * * *":
-				// Every 30 minutes
-				console.log("Syncing token transactions...");
+				// Run on 30-minute schedule
+				console.log("Syncing token transactions and updating PINK stats...");
+				// Sync token transactions first (needed for stats)
 				await syncTokenTransactions(env);
-				await updatePinkDropStats(env);
+				// Update all PINK stats in one go
+				await updatePinkStats(env);
 				break;
 		}
 	},

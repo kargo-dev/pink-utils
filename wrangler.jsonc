@@ -26,7 +26,6 @@
 	],
 	"triggers": {
 		"crons": [
-			"0 * * * *", // Every hour
 			"*/30 * * * *", // Every 30 minutes
 		]
 	},
