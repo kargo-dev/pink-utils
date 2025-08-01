@@ -27,13 +27,13 @@ const router = AutoRouter({
 // Root endpoint
 router.get('/', rootHandler);
 
-// Consolidated PINK stats endpoint
+// Consolidated PINK stats endpoint (includes backward compatibility)
 router.get('/pink-stats', pinkStatsHandler);
 
 // 404 handler
 router.all('*', notFoundHandler);
 
-// Export Worker handlers
+
 export default {
 	fetch: router.fetch,
 	async scheduled(
@@ -46,8 +46,10 @@ export default {
 			case "*/30 * * * *":
 				// Run on 30-minute schedule
 				console.log("Syncing token transactions and updating PINK stats...");
-				// Sync token transactions first (needed for stats)
+
+				// Sync token transactions (needed for stats)
 				await syncTokenTransactions(env);
+
 				// Update all PINK stats in one go
 				await updatePinkStats(env);
 				break;
