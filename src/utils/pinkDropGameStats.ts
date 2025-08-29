@@ -1,7 +1,7 @@
 import { PrismaClient } from '../generated/prisma/';
 import { PrismaD1 } from '@prisma/adapter-d1';
 
-export async function fetchPinkDropStats(env: Env) {
+export async function fetchPinkDropGameStats(env: Env) {
     console.log("Fetching PinkDrop stats...");
 
     const adapter = new PrismaD1(env.DB);

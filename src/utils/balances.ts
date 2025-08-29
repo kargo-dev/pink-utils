@@ -19,14 +19,21 @@ async function sleep(ms: number): Promise<void> {
 export interface TokenBalances {
     maxSupply: number;
     totalSupply: number;
+    totalSupplyPercentage: number;
     circulatingSupply: number;
+    circulatingSupplyPercentage: number;
     moonbeamSupply: number;
     baseSupply: number;
     treasuryBalance: number;
+    treasuryBalancePercentage: number;
     moonbeamBurnBalance: number;
+    moonbeamBurnBalancePercentage: number;
     baseBurnBalance: number;
+    baseBurnBalancePercentage: number;
     phalaBurnBalance: number;
+    phalaBurnBalancePercentage: number;
     totalBurnBalance: number;
+    totalBurnBalancePercentage: number;
     lastUpdated: string;
 }
 
@@ -170,28 +177,45 @@ export async function fetchAllTokenBalances(env: Env): Promise<TokenBalances> {
     console.log(`Phala Burn Balance: ${phalaBurnBalance}`);
 
     const totalBurnBalance = moonbeamBurnBalance + baseBurnBalance + phalaBurnBalance;
+    const totalBurnBalancePercentage = (totalBurnBalance / maxSupply) * 100;
 
-    console.log(`Total Burn Balance: ${totalBurnBalance}`);
+    const phalaBurnBalancePercentage = (phalaBurnBalance / maxSupply) * 100;
+    const moonbeamBurnBalancePercentage = (moonbeamBurnBalance / maxSupply) * 100;
+    const baseBurnBalancePercentage = (baseBurnBalance / maxSupply) * 100;
+
+    console.log(`Total Burn Balance: ${totalBurnBalance}, total burn percentage (${totalBurnBalancePercentage.toFixed(2)}%)`);
 
     const totalSupply = maxSupply - totalBurnBalance;
-    console.log(`Total Supply: ${totalSupply}`);
+    const totalSupplyPercentage = (totalSupply / maxSupply) * 100;
+    console.log(`Total Supply: ${totalSupply}, total supply percentage (${totalSupplyPercentage.toFixed(2)}%)`);
 
     const circulatingSupply = totalSupply - treasuryBalance;
-    console.log(`Circulating Supply: ${circulatingSupply}`);
+    const circulatingSupplyPercentage = (circulatingSupply / maxSupply) * 100;
+    console.log(`Circulating Supply: ${circulatingSupply}, circulating supply percentage (${circulatingSupplyPercentage.toFixed(2)}%)`);
+
+    const treasuryBalancePercentage = (treasuryBalance / maxSupply) * 100;
+    console.log(`Treasury Balance Percentage: ${treasuryBalancePercentage.toFixed(2)}%`);
 
     const lastUpdated = new Date().toISOString();
 
     return {
         maxSupply,
         totalSupply,
+        totalSupplyPercentage,
         circulatingSupply,
+        circulatingSupplyPercentage,
         moonbeamSupply,
         baseSupply,
         treasuryBalance,
+        treasuryBalancePercentage,
         moonbeamBurnBalance,
+        moonbeamBurnBalancePercentage,
         baseBurnBalance,
+        baseBurnBalancePercentage,
         phalaBurnBalance,
+        phalaBurnBalancePercentage,
         totalBurnBalance,
+        totalBurnBalancePercentage,
         lastUpdated
     };
 }

@@ -4,9 +4,9 @@
  */
 
 import { fetchAllTokenBalances } from '../utils/balances';
-import { fetchBurnStats } from '../utils/burn';
+import { fetchPinkDropBurnStats } from '../utils/pinkDropBurnStats';
 import { fetchMarketData } from '../utils/marketData';
-import { fetchPinkDropStats } from '../utils/pinkdropStats';
+import { fetchPinkDropGameStats } from '../utils/pinkDropGameStats';
 
 const PINK_STATS_KEY = 'pink_stats';
 const KV_EXPIRATION_TTL = 60 * 60;
@@ -16,15 +16,15 @@ export async function updatePinkStats(env: Env) {
         console.log("Running scheduled task to update consolidated PINK stats");
 
         const balancesData = await fetchAllTokenBalances(env);
-        const burnStats = await fetchBurnStats(env);
-        const pinkDropStats = await fetchPinkDropStats(env);
+        const pinkDropBurnStats = await fetchPinkDropBurnStats(env);
+        const pinkDropGameStats = await fetchPinkDropGameStats(env);
         const marketData = await fetchMarketData(env);
 
         // Consolidate all stats into a single object
         const consolidatedStats = {
             balances: balancesData,
-            burn: burnStats,
-            pinkDrop: pinkDropStats,
+            pinkDropBurn: pinkDropBurnStats,
+            pinkDropGameStats: pinkDropGameStats,
             marketData: marketData,
             lastUpdated: new Date().toISOString()
         };

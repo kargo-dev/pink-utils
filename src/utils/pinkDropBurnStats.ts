@@ -1,7 +1,7 @@
 import { PrismaClient } from '../generated/prisma/';
 import { PrismaD1 } from '@prisma/adapter-d1';
 
-export async function fetchBurnStats(env: Env) {
+export async function fetchPinkDropBurnStats(env: Env) {
     console.log("Fetching burn stats...");
 
     const adapter = new PrismaD1(env.DB);
