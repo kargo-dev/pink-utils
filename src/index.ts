@@ -43,8 +43,8 @@ export default {
 	) {
 		// Write code for updating your API
 		switch (controller.cron) {
-			case "*/30 * * * *":
-				// Run on 30-minute schedule
+			case "*/10 * * * *":
+				// Run on 10-minute schedule
 				console.log("Syncing token transactions and updating PINK stats...");
 
 				// Sync token transactions (needed for stats)
