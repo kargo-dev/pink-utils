@@ -162,13 +162,17 @@ export async function fetchAllTokenBalances(env: Env): Promise<TokenBalances> {
     await sleep(1000);
 
     // Fetch Base burn balance
-    const baseBurnBalance = await fetchTokenBalance(
+    let baseBurnBalance = await fetchTokenBalance(
         env.BASE.CHAIN_NAME,
         env.BASE.CHAIN_ID,
         env.BASE.PINK_CONTRACT_ADDRESS,
         env.EVM_BURN_ADDRESS,
         env.ETHERSCAN_API_KEY
     );
+	if (baseBurnBalance === 0) {
+		console.warn('Base burn balance is zero, defaulting to hardcoded value.');
+		baseBurnBalance = env.BASE.BURN_AMOUNT;
+	}
     console.log(`Base Burn Balance: ${baseBurnBalance}`);
 
     // Get Phala burn amount (this is a local value, no API call needed)
